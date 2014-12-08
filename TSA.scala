@@ -20,33 +20,42 @@ object TSA {
     }
   }
 
-  class QueueActor extends Actor {
+  class QueueActor(queueNumber: Int) extends Actor {
     def receive() = {
-      case Person(name) => println(name)
+      case Person(name) => 
+		println(name + " arrives in queue " + queueNumber)
+		bodyArray(queueNumber) ! Person(name)
+		bagArray(queueNumber) ! Person(name)
     }
   }
 
-  class BagScanActor extends Actor {
+  class BagScanActor(queueNumber: Int) extends Actor {
     def receive() = {
-      case Person(name) => println(name)
+      case Person(name) => 
+		println(name + "'s bag arrives at bag scanner " + queueNumber)
+		securityArray(queueNumber) ! Person(name)
     }
   }
 
-  class BodyScanActor extends Actor {
+  class BodyScanActor(queueNumber: Int) extends Actor {
     def receive() = {
-      case Person(name) => println(name)
+      case Person(name) => 
+		println(name + " has arrived at body scanner " + queueNumber)
+		securityArray(queueNumber) ! Person(name)
     }
   }
 
-  class SecurityActor extends Actor {
+  class SecurityActor(queueNumber: Int) extends Actor {
     def receive() = {
-      case Person(name) => println(name)
+      case Person(name) => 
+		println(name + " has passed security")
     }
   }
 
   class JailActor extends Actor {
     def receive() = {
-      case Person(name) => println(name)
+      case Person(name) => 
+		println(name " has been sent to jail and will not pass go or collect $200")
     }
   }
 
